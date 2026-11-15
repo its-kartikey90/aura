@@ -1,0 +1,12 @@
+{
+  "name": "aura",
+  "version": "1.0.0",
+  "description": "AI-powered writing assistant — Chrome extension + web app.",
+  "private": true,
+  "scripts": {
+    "dev:web": "cd web && npm run dev",
+    "dev:ext": "cd extension && npm run build:watch",
+    "build:web": "cd web && npm run build",
+    "build:ext": "cd extension && npm run build"
+  }
+}
