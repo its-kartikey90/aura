@@ -1,26 +1,34 @@
 # Aura ✨ — AI-Powered Writing Assistant
 
-Aura is a privacy-conscious AI writing assistant with two experiences:
+Aura includes two experiences:
 
 - **Aura Web** — a responsive React writing studio for improving, rewriting, and shortening text.
 - **Aura Chrome Extension** — the original Manifest V3 extension with the Alt + A inline suggestion workflow.
 
 ## Aura Web
 
-### Run locally
+### Install and run locally
+
+The web app has its own package manifest under `web/`. Install its dependencies from the repository root:
 
 ```bash
-npm install
+npm install --prefix web
 npm run dev:web
 ```
 
-The web app runs with Vite. To create a production build:
+Create a production build:
 
 ```bash
 npm run build:web
 ```
 
-Open the app, choose **API settings**, and add your OpenAI API key. The key is stored in this browser's local storage. Your draft is sent directly from the browser to OpenAI for the requested edit; Aura does not save draft text or keep a writing history.
+Preview the production build:
+
+```bash
+npm run preview:web
+```
+
+Open **API settings** in the app and add your OpenAI API key. The key is stored in this browser's local storage. Your draft is sent directly from the browser to OpenAI only when you request an edit.
 
 ### Web app features
 
@@ -47,7 +55,13 @@ The original extension source remains in `extension/`.
 - The web app stores the API key in browser local storage on the device where it is entered.
 - The extension stores its API key using Chrome sync storage.
 - Writing text is sent to OpenAI only when you request a suggestion.
-- Do not publish or commit API keys. For a multi-user production deployment, use a secure server-side API proxy and user authentication rather than collecting keys in a public client.
+- Never publish or commit API keys.
+- For a public multi-user production deployment, use a server-side API proxy with authentication and rate limiting rather than collecting API keys in a public client.
+- The extension renders AI-generated text as text, not executable HTML.
+
+## Build checks
+
+GitHub Actions runs the web production build on pushes and pull requests targeting this branch. The workflow installs the web app's dependencies and runs `npm run build:web`.
 
 ## Tech stack
 

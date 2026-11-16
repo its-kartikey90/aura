@@ -4,6 +4,7 @@
   "description": "AI-powered writing assistant — React web app + Chrome extension.",
   "private": true,
   "scripts": {
+    "install:web": "npm --prefix web install",
     "dev:web": "npm --prefix web run dev",
     "build:web": "npm --prefix web run build",
     "preview:web": "npm --prefix web run preview",
