@@ -51,6 +51,11 @@ function App() {
     setLoading(true);
     setError("");
     setResult(null);
+    const modeInstruction = activeTab === "Shorten"
+      ? "Make the text substantially more concise while preserving all essential meaning and details."
+      : activeTab === "Rewrite"
+        ? "Rewrite the text with fresh phrasing and a natural flow while preserving its original meaning and details."
+        : "Improve clarity, grammar, flow, and readability while preserving the writer's voice and intent.";
     try {
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
@@ -65,7 +70,7 @@ function App() {
           messages: [
             {
               role: "system",
-              content: `You are Aura, a thoughtful expert writing editor. Rewrite the user's text in a ${tone.toLowerCase()} tone while preserving the original meaning, facts, and intent. Return only a JSON object with keys: improved (string), changes (array of at most 3 short strings), tone (short description of original tone), and summary (one short sentence describing the overall improvement). Do not invent facts.`,
+              content: `You are Aura, a thoughtful expert writing editor. ${modeInstruction} Use a ${tone.toLowerCase()} tone. Preserve all original facts and intent; do not invent details. Return only a JSON object with keys: improved (string), changes (array of at most 3 short strings), tone (short description of original tone), and summary (one short sentence describing the overall improvement).`,
             },
             { role: "user", content: text.trim() },
           ],
