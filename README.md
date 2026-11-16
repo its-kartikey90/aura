@@ -1,37 +1,57 @@
 # Aura ✨ — AI-Powered Writing Assistant
 
-A browser extension and web app that uses AI to improve writing clarity, tone, and grammar in real time.
+Aura is a privacy-conscious AI writing assistant with two experiences:
 
-## Features
+- **Aura Web** — a responsive React writing studio for improving, rewriting, and shortening text.
+- **Aura Chrome Extension** — the original Manifest V3 extension with the Alt + A inline suggestion workflow.
 
-- 🧠 **GPT-4o-mini** powered suggestions — fast and cheap
-- ⌨️ **Inline suggestions** — works on Gmail, Notion, Docs, any site
-- 🔒 **Privacy-first** — your text is never stored
-- ⚡ **Alt+A shortcut** — trigger suggestions instantly
-- 🎨 **Custom style profiles** — professional, casual, academic
+## Aura Web
 
-## Installation
+### Run locally
 
-### Chrome Extension
+```bash
+npm install
+npm run dev:web
+```
 
-1. Clone this repo
-2. Open `chrome://extensions`
-3. Enable **Developer mode**
-4. Click **Load unpacked** → select the `extension/` folder
-5. Click the Aura icon → paste your OpenAI API key
+The web app runs with Vite. To create a production build:
 
-### Usage
+```bash
+npm run build:web
+```
 
-1. Go to any website (Gmail, Notion, LinkedIn, etc.)
-2. Select text you want to improve
-3. Press **Alt + A**
-4. Click **Apply** to replace the selected text
+Open the app, choose **API settings**, and add your OpenAI API key. The key is stored in this browser's local storage. Your draft is sent directly from the browser to OpenAI for the requested edit; Aura does not save draft text or keep a writing history.
 
-## Privacy
+### Web app features
 
-- Your API key is stored locally in Chrome's sync storage
-- Text is sent directly to OpenAI's API — Aura never stores it
-- No analytics, no tracking, no server of its own
+- Improve, rewrite, and shorten writing
+- Professional, friendly, academic, confident, concise, persuasive, and casual tones
+- Live word and character counts
+- Copy the refined result or use it as the next draft
+- Responsive dark interface
+- Bring-your-own OpenAI API key
+
+## Chrome Extension
+
+The original extension source remains in `extension/`.
+
+1. Open `chrome://extensions`
+2. Enable **Developer mode**
+3. Choose **Load unpacked**
+4. Select the `extension/` directory
+5. Open the Aura extension popup and configure your OpenAI API key
+6. Select text on a webpage and press **Alt + A**
+
+## Privacy and security
+
+- The web app stores the API key in browser local storage on the device where it is entered.
+- The extension stores its API key using Chrome sync storage.
+- Writing text is sent to OpenAI only when you request a suggestion.
+- Do not publish or commit API keys. For a multi-user production deployment, use a secure server-side API proxy and user authentication rather than collecting keys in a public client.
+
+## Tech stack
+
+React, Vite, JavaScript, CSS, OpenAI Chat Completions API, and Chrome Manifest V3.
 
 ## Built by
 
