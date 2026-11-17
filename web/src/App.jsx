@@ -122,7 +122,32 @@ function App() {
     setError("");
   }
 
-  return (
+  return view === "home" ? (
+    <div className="marketing-shell">
+      <nav className="marketing-nav">
+        <a className="brand" href="#" onClick={(e) => e.preventDefault()}><span className="brand-mark"><Sparkles size={19}/></span><span>Aura<span className="brand-period">.</span></span></a>
+        <div className="marketing-nav-links"><a href="#features">Features</a><a href="#how-it-works">How it works</a><a href="https://github.com/its-kartikey90/aura" target="_blank" rel="noreferrer">GitHub <ArrowRight size={13}/></a></div>
+        <button className="nav-cta" onClick={() => setView("studio")}>Open writing studio <ArrowRight size={15}/></button>
+      </nav>
+      <main className="marketing-main">
+        <section className="marketing-hero">
+          <div className="marketing-copy">
+            <div className="marketing-kicker"><span/> YOUR THOUGHTS, AT THEIR BEST</div>
+            <h1>Write with clarity.<br/><span>Sound like you.</span></h1>
+            <p className="marketing-lede">Meet your thoughtful AI writing partner. Refine rough drafts, find the right tone, and turn good ideas into words that work.</p>
+            <div className="marketing-actions"><button className="hero-primary" onClick={() => setView("studio")}><Sparkles size={17}/> Try Aura <ArrowRight size={16}/></button><a href="#features" className="hero-secondary">Explore features <ArrowRight size={15}/></a></div>
+            <div className="hero-trust"><span><ShieldCheck size={15}/> You control your API key</span><span><LockKeyhole size={14}/> Private by design</span></div>
+          </div>
+          <div className="hero-preview"><div className="preview-top"><div className="preview-brand"><span><Sparkles size={14}/></span> Aura <small>WRITING STUDIO</small></div><span className="preview-status"><i/> READY TO WRITE</span></div><div className="preview-label">YOUR DRAFT <span>✦</span></div><div className="preview-draft">I wanted to reach out and see if we could possibly move our meeting to another day. Something came up and I want to make sure we have enough time to discuss everything.</div><div className="preview-divider"><span/> AURA REFINEMENT <span/></div><div className="preview-result">Could we reschedule our meeting for another day? Something unexpected came up, and I’d like to ensure we have enough time for a thoughtful discussion.</div><div className="preview-footer"><span><Check size={13}/> Clearer, more confident, still you</span><span className="preview-copy">Copy text <Clipboard size={12}/></span></div><div className="preview-glow"/></div>
+        </section>
+        <section className="proof-strip"><div><strong>01</strong><span>Write naturally</span></div><div><strong>02</strong><span>Choose your tone</span></div><div><strong>03</strong><span>Keep your voice</span></div><div><strong>04</strong><span>Make every word count</span></div></section>
+        <section className="feature-section" id="features"><div className="section-heading"><span className="marketing-kicker">A SMALL TOOL WITH A BIG IMPACT</span><h2>Everything you need to<br/><em>say it better.</em></h2><p>Simple controls. Thoughtful results. No complicated workflow.</p></div><div className="feature-grid"><article className="feature-card"><div className="feature-icon"><WandSparkles size={19}/></div><h3>Improve your writing</h3><p>Fix grammar, sharpen clarity, and smooth out the flow without losing your original intent.</p><span>01 / REFINE</span></article><article className="feature-card"><div className="feature-icon"><RefreshCw size={19}/></div><h3>Find a fresh angle</h3><p>Rewrite your draft with natural phrasing that feels right for the person reading it.</p><span>02 / REWRITE</span></article><article className="feature-card"><div className="feature-icon"><ArrowDownToLine size={19}/></div><h3>Make it concise</h3><p>Remove unnecessary words while keeping the details and meaning that matter.</p><span>03 / SHORTEN</span></article></div></section>
+        <section className="how-section" id="how-it-works"><div><span className="marketing-kicker">YOUR WORKFLOW, SIMPLIFIED</span><h2>From first draft<br/>to <em>just right.</em></h2></div><div className="steps-list"><div><b>01</b><span><strong>Bring your words</strong><small>Paste a draft or start with a rough idea.</small></span></div><div><b>02</b><span><strong>Choose how it should sound</strong><small>Pick a tone that fits your audience and purpose.</small></span></div><div><b>03</b><span><strong>Refine and make it yours</strong><small>Review, copy, and keep editing whenever you like.</small></span></div></div></section>
+        <section className="final-cta"><div className="cta-spark"><Sparkles size={22}/></div><div><span className="marketing-kicker">READY WHEN YOU ARE</span><h2>Your next great message<br/>starts with a first draft.</h2></div><button className="hero-primary" onClick={() => setView("studio")}>Open Aura <ArrowRight size={16}/></button></section>
+      </main>
+      <footer className="marketing-footer"><a className="brand" href="#"><span className="brand-mark"><Sparkles size={16}/></span><span>Aura<span className="brand-period">.</span></span></a><span>Thoughtful writing, made simple.</span><span>© 2026 Aura Studio</span></footer>
+    </div>
+  ) : (
     <div className="app-shell">
       <aside className="sidebar">
         <a className="brand" href="#" aria-label="Aura home" onClick={(e) => { e.preventDefault(); setView("home"); }}>
