@@ -3,7 +3,6 @@
 
 let auraPanel = null
 let currentElement = null
-let debounceTimer = null
 
 function createPanel() {
   if (auraPanel) return
@@ -11,20 +10,31 @@ function createPanel() {
   auraPanel.id = 'aura-panel'
   auraPanel.setAttribute('aria-label', 'Aura writing suggestions')
   auraPanel.setAttribute('role', 'complementary')
-  auraPanel.innerHTML = `
-    <div class="aura-header">
-      <span class="aura-logo">✨ Aura</span>
-      <button class="aura-close" aria-label="Close">×</button>
-    </div>
-    <div class="aura-content">
-      <p class="aura-hint">Select text and press <kbd>Alt+A</kbd> for suggestions</p>
-    </div>
-  `
-  document.body.appendChild(auraPanel)
 
-  auraPanel.querySelector('.aura-close').addEventListener('click', () => {
-    auraPanel.style.display = 'none'
-  })
+  const header = document.createElement('div')
+  header.className = 'aura-header'
+  const logo = document.createElement('span')
+  logo.className = 'aura-logo'
+  logo.textContent = '✨ Aura'
+  const close = document.createElement('button')
+  close.className = 'aura-close'
+  close.setAttribute('aria-label', 'Close')
+  close.textContent = '×'
+  close.addEventListener('click', () => { auraPanel.style.display = 'none' })
+  header.append(logo, close)
+
+  const content = document.createElement('div')
+  content.className = 'aura-content'
+  const hint = document.createElement('p')
+  hint.className = 'aura-hint'
+  hint.append('Select text and press ')
+  const shortcut = document.createElement('kbd')
+  shortcut.textContent = 'Alt+A'
+  hint.append(shortcut, ' for suggestions')
+  content.append(hint)
+
+  auraPanel.append(header, content)
+  document.body.appendChild(auraPanel)
 }
 
 function positionPanel(el) {
@@ -32,65 +42,92 @@ function positionPanel(el) {
   const scrollY = window.scrollY
   const scrollX = window.scrollX
   auraPanel.style.top = `${rect.bottom + scrollY + 8}px`
-  auraPanel.style.left = `${Math.min(rect.left + scrollX, window.innerWidth - 320)}px`
+  auraPanel.style.left = `${Math.max(8, Math.min(rect.left + scrollX, window.innerWidth - 320))}px`
   auraPanel.style.display = 'block'
 }
 
+function setPanelContent(node) {
+  const content = auraPanel.querySelector('.aura-content')
+  content.replaceChildren(node)
+}
+
 function showLoading() {
-  auraPanel.querySelector('.aura-content').innerHTML = `
-    <div class="aura-loading">
-      <div class="aura-spinner"></div>
-      <span>Analysing…</span>
-    </div>
-  `
+  const loading = document.createElement('div')
+  loading.className = 'aura-loading'
+  const spinner = document.createElement('div')
+  spinner.className = 'aura-spinner'
+  const label = document.createElement('span')
+  label.textContent = 'Analysing…'
+  loading.append(spinner, label)
+  setPanelContent(loading)
 }
 
 function showSuggestion(original, result) {
-  auraPanel.querySelector('.aura-content').innerHTML = `
-    <div class="aura-suggestion">
-      <div class="aura-improved">
-        <label>Improved</label>
-        <p>${result.improved}</p>
-      </div>
-      <div class="aura-changes">
-        ${result.changes?.map(c => `<span class="aura-tag">✓ ${c}</span>`).join('') || ''}
-      </div>
-      <div class="aura-actions">
-        <button class="aura-btn aura-btn-apply">Apply</button>
-        <button class="aura-btn aura-btn-dismiss">Dismiss</button>
-      </div>
-    </div>
-  `
+  const suggestion = document.createElement('div')
+  suggestion.className = 'aura-suggestion'
 
-  auraPanel.querySelector('.aura-btn-apply').addEventListener('click', () => {
+  const improved = document.createElement('div')
+  improved.className = 'aura-improved'
+  const label = document.createElement('label')
+  label.textContent = 'Improved'
+  const paragraph = document.createElement('p')
+  paragraph.textContent = String(result?.improved ?? '')
+  improved.append(label, paragraph)
+
+  const changes = document.createElement('div')
+  changes.className = 'aura-changes'
+  const changeList = Array.isArray(result?.changes) ? result.changes : []
+  changeList.slice(0, 3).forEach((change) => {
+    const tag = document.createElement('span')
+    tag.className = 'aura-tag'
+    tag.textContent = `✓ ${String(change)}`
+    changes.append(tag)
+  })
+
+  const actions = document.createElement('div')
+  actions.className = 'aura-actions'
+  const apply = document.createElement('button')
+  apply.className = 'aura-btn aura-btn-apply'
+  apply.textContent = 'Apply'
+  const dismiss = document.createElement('button')
+  dismiss.className = 'aura-btn aura-btn-dismiss'
+  dismiss.textContent = 'Dismiss'
+
+  apply.addEventListener('click', () => {
     if (currentElement) {
       if (currentElement.isContentEditable) {
-        document.execCommand('insertText', false, result.improved)
-      } else {
+        document.execCommand('insertText', false, paragraph.textContent)
+      } else if (typeof currentElement.selectionStart === 'number' && typeof currentElement.selectionEnd === 'number') {
         const start = currentElement.selectionStart
         const end = currentElement.selectionEnd
-        currentElement.value = currentElement.value.slice(0, start) + result.improved + currentElement.value.slice(end)
+        currentElement.setRangeText(paragraph.textContent, start, end, 'end')
+        currentElement.dispatchEvent(new Event('input', { bubbles: true }))
       }
     }
     auraPanel.style.display = 'none'
   })
+  dismiss.addEventListener('click', () => { auraPanel.style.display = 'none' })
 
-  auraPanel.querySelector('.aura-btn-dismiss').addEventListener('click', () => {
-    auraPanel.style.display = 'none'
-  })
+  actions.append(apply, dismiss)
+  suggestion.append(improved, changes, actions)
+  setPanelContent(suggestion)
 }
 
 function showError(msg) {
-  auraPanel.querySelector('.aura-content').innerHTML = `<p class="aura-error">${msg}</p>`
+  const error = document.createElement('p')
+  error.className = 'aura-error'
+  error.textContent = String(msg || 'Something went wrong')
+  setPanelContent(error)
 }
 
-async function triggerSuggestion() {
+function triggerSuggestion() {
   const selection = window.getSelection()
   const text = selection?.toString().trim()
   if (!text || text.length < 10) return
 
   createPanel()
   currentElement = document.activeElement
+  if (!currentElement || typeof currentElement.getBoundingClientRect !== 'function') return
   positionPanel(currentElement)
   showLoading()
 
@@ -105,7 +142,7 @@ async function triggerSuggestion() {
 
 // Keyboard shortcut: Alt+A
 document.addEventListener('keydown', (e) => {
-  if (e.altKey && e.key === 'a') {
+  if (e.altKey && e.key.toLowerCase() === 'a') {
     e.preventDefault()
     triggerSuggestion()
   }

@@ -1,12 +1,14 @@
 {
   "name": "aura",
-  "version": "1.0.0",
-  "description": "AI-powered writing assistant — Chrome extension + web app.",
+  "version": "1.1.0",
+  "description": "AI-powered writing assistant — React web app + Chrome extension.",
   "private": true,
   "scripts": {
-    "dev:web": "cd web && npm run dev",
-    "dev:ext": "cd extension && npm run build:watch",
-    "build:web": "cd web && npm run build",
-    "build:ext": "cd extension && npm run build"
+    "install:web": "npm --prefix web install",
+    "dev:web": "npm --prefix web run dev",
+    "build:web": "npm --prefix web run build",
+    "preview:web": "npm --prefix web run preview",
+    "dev:ext": "node -e \"console.log('Load the extension/ folder as an unpacked extension in chrome://extensions')\"",
+    "build:ext": "node -e \"console.log('The Manifest V3 extension is plain JavaScript and does not require a build step.')\""
   }
 }
