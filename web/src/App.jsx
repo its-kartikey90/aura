@@ -10,6 +10,7 @@ const TONES = ["Professional", "Friendly", "Academic", "Confident", "Concise", "
 const EXAMPLE = "Hey team, I wanted to reach out because I think we should maybe consider moving the deadline a little bit. We have a few things left to finish and I don't want us to rush and miss anything important. Let me know what you think.";
 
 function App() {
+  const [view, setView] = useState("home");
   const [text, setText] = useState("");
   const [tone, setTone] = useState("Professional");
   const [result, setResult] = useState(null);
@@ -124,12 +125,12 @@ function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#" aria-label="Aura home">
+        <a className="brand" href="#" aria-label="Aura home" onClick={(e) => { e.preventDefault(); setView("home"); }}>
           <span className="brand-mark"><Sparkles size={19} /></span>
           <span>Aura<span className="brand-period">.</span></span>
         </a>
         <div className="workspace-label">WORKSPACE</div>
-        <button className="side-link active"><WandSparkles size={17} /> Writing studio <span className="side-indicator" /></button>
+        <button className="side-link active" onClick={() => setView("studio")}><WandSparkles size={17} /> Writing studio <span className="side-indicator" /></button>
         <button className="side-link" onClick={() => setSettingsOpen(true)}><Settings2 size={17} /> Preferences</button>
         <div className="sidebar-bottom">
           <div className="privacy-card">
@@ -146,7 +147,7 @@ function App() {
 
       <main className="main-area">
         <header className="topbar">
-          <div className="breadcrumbs"><span>Workspace</span><span className="crumb-slash">/</span><strong>Writing studio</strong></div>
+          <div className="breadcrumbs"><button className="crumb-home" onClick={() => setView("home")}>Aura</button><span className="crumb-slash">/</span><strong>Writing studio</strong></div>
           <div className="topbar-actions">
             <span className="secure-label"><LockKeyhole size={13} /> Private session</span>
             <button className="icon-button" aria-label="Settings" onClick={() => setSettingsOpen(true)}><Settings2 size={18} /></button>
